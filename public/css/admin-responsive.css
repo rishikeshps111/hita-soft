@@ -1,0 +1,174 @@
+@media screen and (max-width:1300px){}
+
+
+@media screen and (max-width:1200px){
+     section.gj_top_header #gj_top .navbar{
+        position:static !important;
+    }
+      .adm-head-cover{
+        height:0;
+    }
+    .dashboard-card-three,.custom-dashboard-card{
+        margin-bottom:10px;
+    }
+     .adminLeftSide {
+        /* height: 100%; */
+         /* border-bottom: 3px solid #7cb342; */
+         width: 0% !important;
+         position: fixed;
+         z-index: 1000 !important;
+         top: 0;
+         left: 0;
+         /* bottom: 0; */
+         overflow: hidden;
+         padding-top: 0px;
+         transition: 0.5s;
+         padding-bottom: 30px;
+         padding-left: 0 !important;
+         padding-right: 0 !important;
+         height: 100vh;
+         
+    
+     }
+      .adminLeftSideOpen {
+        width: 50% !important;
+        opacity: 1 !important;
+            background: #bb488e;
+            overflow: auto;
+    }
+    .adminLeftSideOpen .panel{
+        border:0 !important;
+    }
+    .adminLeftSideOpen #gj_menu{
+        border:0;
+    }
+    .main-right-container,.gj_box{
+        margin-top:10px;
+    }
+    .Mob-side-open,.Mob-side-close{
+        display:block !important;
+    }
+    .main-right-container h3{
+        margin-bottom:7px !important;
+    }
+    .stock-add-container .col-lg-4{
+        width:33%;
+    }
+    .wrap-row-cs{
+        display:unset !important;
+      
+    }
+}
+
+
+@media screen and (max-width:991px){
+   
+  
+    .mainmenu ul.gj_main{
+        justify-content:flex-start;
+        overflow:auto;
+        padding:0;
+    }
+     .chart-box .mb-3{
+         margin-bottom:12px;
+     }
+     div.chart-inner-box{
+         margin:10px 0 !important;
+     }
+     
+}
+
+
+@media screen and (max-width:768px){
+    .chart-box{
+        padding:10px;
+    }
+    .title-between{
+        flex-direction:column;
+    }
+    .adminLeftSideOpen{
+        width:100% !important;
+    }
+    .mob-row-flex .dataTables_wrapper .row:first-child{
+        padding:5px 10px;
+    }
+    .mob-row-flex .dataTables_wrapper .row:first-child label{
+        display:flex;
+        align-items:center;
+        gap:5px;
+    }
+    .mob-row-flex .dataTables_wrapper .row:first-child select,.mob-row-flex .dataTables_wrapper .row:first-child input{
+        min-width:100px;
+                width: 150px;
+    }
+    .mob-static{
+        position:static;
+    }
+    .date-filter-mob{
+            gap: 5px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    }
+     .date-filter-mob input,.date-filter-mob select{
+         width:100%;
+     }
+}
+
+
+@media screen and (max-width:567px){
+      section.gj_top_header #gj_top .navbar{
+        padding:0 !important;
+    }
+    .navbar-brand>img{
+        height:unset;
+        max-width:90px;
+    }
+    .container-field form input, .container-field input, .container-field form select, .container-field select,.container-field-table tr td textarea,.container-field input[type="file"]{
+        min-width:160px;
+        height:40px;
+            border: 1px solid #2222227a;
+    }
+    .container-field input[type="checkbox"], .container-field input[type="radio"]{
+        min-width:unset;
+    }
+    .container-field input[type="file"]::file-selector-button{
+        height:40px;
+    }
+    .table-responsive>.table{
+        margin-top:0 !important;
+    }
+    .gj_box .col-md-12{
+        padding:0 !important;
+    }
+    .no-img-col-padding .col-md-6{
+        padding:0;
+    }
+    .top-btns label, .top-btns button,.top-btns .gj_squaredFour,.top-btns a{
+        width:100%;
+    }
+    .top-btns a button{
+          width:98%;
+    }
+    .table-responsive{
+        border:0px !important;
+    }
+    .dataTables_wrapper .dataTables_paginate{
+        float: inline-start !important;
+    }
+    .dataTables_wrapper .dataTables_info{
+         float: inline-start !important;
+    }
+     .stock-add-container .col-lg-4{
+        width:100%;
+    }
+    .top-select-cs-form select{
+        width:100%;
+        max-width:100%;
+        height:38px !important;
+    }
+    .top-select-cs-form {
+        width:100%;
+        padding:0 5px;
+    }
+}

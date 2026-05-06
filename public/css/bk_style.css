@@ -1,0 +1,9 @@
+#product_title {
+    position: relative;
+}
+
+span.gj_ptit_edit {
+    position: absolute;
+    top: 35px;
+    right: 25px;
+}
