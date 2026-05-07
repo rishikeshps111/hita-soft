@@ -1211,9 +1211,11 @@ class UsersController extends Controller
                 'phone'                   => 'required|numeric|unique:users,phone,'.$id.',id',
                 'phone2'                  => 'nullable|numeric|unique:users,phone2,'.$id.',id',
                 'gender'                  => 'nullable',
-                'address1'                => 'required',
+                'customer_type'           => 'nullable',
+                'dob'                     => 'nullable|date',
+                'address1'                => 'nullable',
                 'address2'                => 'nullable',
-                'pincode'                 => 'required|numeric|digits:6',
+                'pincode'                 => 'nullable|numeric|digits:6',
                 'commission'              => 'nullable|numeric',
                 'return_commission'       => 'nullable|numeric',
                 'question'                => 'nullable',
@@ -1274,20 +1276,24 @@ class UsersController extends Controller
                     $user->answer                = $data['answer'];
                 }
 
-                $user->full_name                 = $data['full_name']?? '';
-                $user->first_name                = $data['first_name'] ?? '';
-                $user->last_name                 = $data['last_name'] ?? '';
+                $fullName = trim($data['full_name'] ?? '');
+                $nameParts = preg_split('/\s+/', $fullName, 2);
+
+                $user->full_name                 = $fullName;
+                $user->first_name                = $data['first_name'] ?? ($nameParts[0] ?? $user->first_name);
+                $user->last_name                 = $data['last_name'] ?? ($nameParts[1] ?? $user->last_name);
                 $user->email                     = $data['email'];
-                $user->dob                     = $data['dob'] ?? '';
+                $user->dob                       = $data['dob'] ?? null;
                 $user->country                   = $data['country'] ?? '0';
                 $user->state                     = $data['state'] ?? '0';
                 $user->city                      = $data['city'] ?? '0';
                 $user->phone                     = $data['phone'];
-                $user->phone2                    = $data['phone2'] ?? '0';
-                $user->gender                    = $data['gender'] ?? '0';
-                $user->address1                  = $data['address1'];
-                $user->address2                  = $data['address2'] ?? '0';
-                $user->pincode                   = $data['pincode'];
+                $user->phone2                    = $data['phone2'] ?? null;
+                $user->gender                    = $data['gender'] ?? null;
+                $user->customer_type             = $data['customer_type'] ?? null;
+                $user->address1                  = $data['address1'] ?? null;
+                $user->address2                  = $data['address2'] ?? null;
+                $user->pincode                   = $data['pincode'] ?? null;
 
                 /*if (isset($data['commission'])) {
                     $user->commission            = $data['commission'];
@@ -1353,7 +1359,7 @@ class UsersController extends Controller
                     Session::put('user', $user);
 
                     if($user->user_type == 4) {
-                        return redirect()->route('my_account');
+                        return redirect()->route('my_account', ['tab' => 'profile']);
                     } else {
                         return redirect()->route('my_profile');
                     }
@@ -1363,7 +1369,7 @@ class UsersController extends Controller
                     // return redirect()->route('my_profile');
                     // return Redirect::back();
                     if($user->user_type == 4) {
-                        return redirect()->route('my_account');
+                        return redirect()->route('my_account', ['tab' => 'profile']);
                     } else {
                         return redirect()->route('my_profile');
                     }

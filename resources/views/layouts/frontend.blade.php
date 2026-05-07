@@ -278,23 +278,7 @@ use Illuminate\Support\Str;
 
                             // setTimeout(function(){ window.location.reload(); }, 3000);
                         } else if (data != 1) {
-                            // $.confirm({
-                            //     title: '',
-                            //     content: 'Added To Cart!',
-                            //     icon: 'fa fa-check',
-                            //     theme: 'modern',
-                            //     closeIcon: true,
-                            //     animation: 'scale',
-                            //     type: 'green',
-                            //     buttons: {
-                            //         Ok: function(){
-                            //             window.location.reload();
-                            //         }
-                            //     }
-                            // });
-                            showCartMessage('Added to cart successfully.', 'success', function() {
-                                window.location.reload();
-                            });
+                            window.location.reload();
                         } else {
                             showCartMessage('No action performed.', 'error', function() {
                                 window.location.reload();

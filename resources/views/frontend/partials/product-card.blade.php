@@ -41,6 +41,13 @@
                 <li><i class="fas fa-shield-alt"></i>{{ $productFeature }}</li>
             @endif
         </ul>
-        <a href="{{ route('view_products', ['id' => $product->id]) }}" class="view-details">View Details</a>
+        <div class="purchase-actions">
+            @if($product->onhand_qty > 0)
+                <a href="javascript:void(0)" class="view-details gj_add2cart" data-cart-id="{{ $product->id }}">Add to Cart</a>
+            @else
+                <a href="javascript:void(0)" class="view-details disabled" aria-disabled="true">Out of Stock</a>
+            @endif
+            <a href="{{ route('view_products', ['id' => $product->id]) }}" class="view-details">View Details</a>
+        </div>
     </div>
 </div>

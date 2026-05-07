@@ -766,6 +766,30 @@ body {
 .purchase-info a.view-details:hover{
     border-radius: 40px;
 }
+.purchase-actions {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.purchase-info .purchase-actions a.view-details {
+    position: static;
+    left: auto;
+    bottom: auto;
+    transform: none;
+    width: 50%;
+    margin: 0;
+    min-height: 44px;
+    text-align: center;
+}
+.purchase-info .purchase-actions a.view-details.disabled {
+    pointer-events: none;
+    background-color: #8b8b8b;
+}
 .purchase-rating{
     display: flex;
     justify-content: flex-start;
