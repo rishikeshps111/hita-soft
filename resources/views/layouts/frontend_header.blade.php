@@ -6,9 +6,11 @@
                     <div class="top-header-content">
                         <div class="top-bar-contact">
                             <ul>
-                                <li><a href="#!"><i class="fa-solid fa-envelope"></i> hitasoftsystems@gmail.com</a>
+                                <li><a href="mailto:{{ $header_email }}"><i class="fa-solid fa-envelope"></i>
+                                        {{ $header_email }}</a>
                                 </li>
-                                <li><a href="#!"><i class="fa-solid fa-phone"></i>+91 9387737998</a></li>
+                                <li><a href="tel:{{ $header_phone }}"><i
+                                            class="fa-solid fa-phone"></i>{{ $header_phone }}</a></li>
                             </ul>
                         </div>
                     </div>
@@ -62,10 +64,77 @@
                         <li class="nav-item">
                             <a class="nav-link " href="{{ route('contact_us') }}">Contact Us</a>
                         </li>
-                        <div class="top-auth-box">
-                            <a href="auth-page.html">Sign In</a>
-                            <!-- <a href="sign_up.html">Sign Up</a> -->
-                        </div>
+                        @php
+                            $headerCarts = [];
+                            $headerWishlists = [];
+                            $sessionCart = Session::get('cart', []);
+                            $headerCartCount = is_countable($sessionCart) ? count($sessionCart) : 0;
+
+                            if ($login_user && $login_user->user_type == 4) {
+                                $headerCarts = \DB::table('carts')->where('user_id', $login_user->id)->get()->toArray();
+                                $headerWishlists = \DB::table('wish_lists')->where('user_id', $login_user->id)->get()->toArray();
+                                $headerCartCount = count($headerCarts) > 0 ? count($headerCarts) : $headerCartCount;
+                            }
+
+                            $headerWishlistCount = count($headerWishlists);
+                            $headerUserName = 'My Account';
+
+                            if ($login_user) {
+                                $headerUserName = trim(($login_user->full_name ?? '') ?: trim(($login_user->first_name ?? '') . ' ' . ($login_user->last_name ?? '')));
+                                $headerUserName = $headerUserName !== '' ? $headerUserName : 'My Account';
+                            }
+
+                            $headerProfileImage = null;
+
+                            if ($login_user && !empty($login_user->profile_img)) {
+                                $headerProfileImage = asset($prof_file_path . '/' . $login_user->profile_img);
+                            } elseif (!empty($noimage->profile_no_img)) {
+                                $headerProfileImage = asset($noimage_path . '/' . $noimage->profile_no_img);
+                            } else {
+                                $headerProfileImage = asset('assets/img/no-user-image-square.jpg');
+                            }
+                        @endphp
+
+                        @if($login_user && $login_user->user_type == 4 && $headerWishlistCount > 0)
+                            <li class="nav-item header-action-item">
+                                <a href="{{ route('wishlist') }}" class="cart-icon cart_rang cart-heart"
+                                    aria-label="Wishlist">
+                                    <i class="fa-regular fa-heart" aria-hidden="true"></i>
+                                    <span class="cart-count">{{ $headerWishlistCount }}</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        <li class="nav-item header-action-item">
+                            <a href="{{ route('cart') }}" class="cart-icon cart_rang cart-shop" aria-label="Cart">
+                                <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
+                                @if($headerCartCount > 0)
+                                    <span class="cart-count">{{ $headerCartCount }}</span>
+                                @endif
+                            </a>
+                        </li>
+
+                        @if($login_user && $login_user->user_type == 4)
+                            <div class="acount-drop-down drop-block" id="profileDrop" onclick="profileDrop()">
+                                <span>
+                                    <img src="{{ $headerProfileImage }}" alt="{{ $headerUserName }}">
+                                    <p>{{ $headerUserName }}</p>
+                                </span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                                <div class="acount-drop-menu">
+                                    <ul>
+                                        <li><a href="{{ route('my_account') }}"><i class="fa-solid fa-user"></i> My
+                                                Account</a></li>
+                                        <li><a href="{{ route('logout') }}"><i
+                                                    class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        @else
+                            <li class="nav-item header-action-item top-auth-box">
+                                <a href="{{ route('signin') }}" class="sign-in" style="color: #fff;"> Sign In</a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
             </div>

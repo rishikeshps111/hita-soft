@@ -75,32 +75,33 @@ if ($right_offer) {
     $st_date6 = date("Y-m-d", strtotime($right_offer->ad_start_date));
     $en_date6 = date("Y-m-d", strtotime($right_offer->ad_end_date));
 }
+
+$contact_defaults = \App\ContactUsPage::defaults();
+$contact_data = isset($contact_page) && $contact_page
+    ? array_merge($contact_defaults, array_filter($contact_page->toArray(), function ($value) {
+        return $value !== null && $value !== "";
+    }))
+    : $contact_defaults;
+$contact_asset = function ($path) {
+    if (!$path) {
+        return "";
+    }
+
+    return preg_match('/^https?:\/\//', $path) ? $path : asset($path);
+};
 ?>
 
 @extends('layouts.frontend')
-@section('title', 'About Us')
+@section('title', 'Contact Us')
 
 @section('content')
 <style>
 
 </style>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="gj_msg">
-                @if($errors->any())
-                <p class="alert alert-danger auto-dismiss" id="errorMessage">
-                    {{ $errors->first() }}
-                </p>
-                @endif
-            </div>
-        </div>
-    </div>
-</div>
 <div class="page-baner"
-    style="  background-image:linear-gradient(128deg,rgba(0, 0, 0, 0.485) 0%, rgba(0, 0, 0, 0.589) 100%), url(assets/img/baner/2.jpg);">
-    <h3>Contact Us</h3>
+    style="  background-image:linear-gradient(128deg,rgba(0, 0, 0, 0.485) 0%, rgba(0, 0, 0, 0.589) 100%), url({{ $contact_asset($contact_data['banner_image'] ?? '') }});">
+    <h3>{{ $contact_data['banner_title'] ?? '' }}</h3>
 </div>
 
 <section class="section-padding  bg-section">
@@ -114,29 +115,28 @@ if ($right_offer) {
                             <div class="contact-ad-icon">
                                 <i class="fa-solid fa-location-dot"></i>
                             </div>
-                            TC 49/20-1 Pamamcode, Pappanamcode Industrial Estate PO Thiruvananthapuram, Kerala -
-                            695019 India
+                            {{ $contact_data['address'] ?? '' }}
 
                         </li>
                         <li class="align-items-center">
                             <div class="contact-ad-icon">
                                 <i class="fa-regular fa-envelope-open"></i>
                             </div>
-                            hitasoftsystems@gmail.com
+                            {{ $contact_data['email'] ?? '' }}
                         </li>
                         <li class="align-items-center">
-                            <a href="#!" target="_blank" class="contact-a">
+                            <a href="tel:{{ $contact_data['phone'] ?? '' }}" class="contact-a">
                                 <div class="contact-ad-icon">
                                     <i class="fa-solid fa-phone"></i>
                                 </div>
-                                +91-9387737998
+                                {{ $contact_data['phone'] ?? '' }}
                             </a>
                         </li>
                     </ul>
                 </div>
                 <div class="contact-us-box mb-2">
                     <div class="cnt-map">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3946.3111668607303!2d77.0014897747738!3d8.469091891571589!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b05bb00115a96cf%3A0xbdbab5ca7c70fa2a!2sHita%20Soft%20Systems!5e0!3m2!1sen!2sin!4v1777365749512!5m2!1sen!2sin" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <iframe src="{{ $contact_data['map_iframe'] ?? '' }}" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
 
@@ -144,42 +144,69 @@ if ($right_offer) {
             <div class="col-lg-8 mb-3">
                 <div class="contact-form">
 
-                    <p>Please complete the form below. We'll do everything we can to respond to you as quickly as
-                        possible.</p>
-                    <form action="" class="mt-3">
+                    <p>{{ $contact_data['form_intro'] ?? '' }}</p>
+                    <div class="gj_msg">
+                        @if(Session::has('message'))
+                        <p class="alert {{ Session::get('alert-class', 'alert-info') }} auto-dismiss" id="successMessage">
+                            {{ Session::get('message') }}
+                        </p>
+                        @endif
+                        @if($errors->any())
+                        <p class="alert alert-danger auto-dismiss" id="errorMessage">
+                            {{ $errors->first() }}
+                        </p>
+                        @endif
+                    </div>
+                    <form action="{{ route('contact_us.store') }}" method="POST" class="mt-3">
+                        @csrf
                         <div class="row">
                             <div class="col-lg-6 mb-3">
                                 <div class="contact-form-box">
                                     <label for="name" class="form-label">Full Name</label>
-                                    <input type="text" class="form-control shadow-none" id="name">
+                                    <input type="text" name="contact_name" class="form-control shadow-none" id="name" value="{{ old('contact_name') }}">
+                                    @if($errors->has('contact_name'))
+                                    <span class="text-danger">{{ $errors->first('contact_name') }}</span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <div class="contact-form-box">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control shadow-none" id="email">
+                                    <input type="email" name="contact_email" class="form-control shadow-none" id="email" value="{{ old('contact_email') }}">
+                                    @if($errors->has('contact_email'))
+                                    <span class="text-danger">{{ $errors->first('contact_email') }}</span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <div class="contact-form-box">
                                     <label for="phone" class="form-label">Phone</label>
-                                    <input type="text" class="form-control shadow-none" id="phone">
+                                    <input type="text" name="contact_phone" class="form-control shadow-none" id="phone" value="{{ old('contact_phone') }}">
+                                    @if($errors->has('contact_phone'))
+                                    <span class="text-danger">{{ $errors->first('contact_phone') }}</span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <div class="contact-form-box">
                                     <label for="Subject" class="form-label">Subject</label>
-                                    <input type="text" class="form-control shadow-none" id="Subject">
+                                    <input type="text" name="subject" class="form-control shadow-none" id="Subject" value="{{ old('subject') }}">
+                                    @if($errors->has('subject'))
+                                    <span class="text-danger">{{ $errors->first('subject') }}</span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-lg-12 mb-3">
                                 <div class="contact-form-box">
                                     <label for="Message" class="form-label">Message</label>
-                                    <textarea name="" id="Message" class="form-control shadow-none"></textarea>
+                                    <textarea name="message" id="Message" class="form-control shadow-none">{{ old('message') }}</textarea>
+                                    @if($errors->has('message'))
+                                    <span class="text-danger">{{ $errors->first('message') }}</span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-lg-12">
-                                <button type="button" class="contact-btn">Send Message</button>
+                                <button type="submit" class="contact-btn">Send Message</button>
                             </div>
                         </div>
                     </form>

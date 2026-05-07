@@ -47,7 +47,7 @@
                                     <th>#</th>
                                     <th>Image Title</th>
                                     <!-- <th>Speed</th> -->
-                                    <th>Redirect URL</th>
+                                    {{-- <th>Redirect URL</th>` --}}
                                     <th>Image</th>
                                     <th>Edit</th>
                                     <th>Status</th>
@@ -72,7 +72,7 @@
                                             <td><input type="checkbox" name="check[]" class="checkBoxClass" value="{{$value->id}}" id="Checkbox{{$i}}" /></td>
                                             <td>{{$value->image_title}}</td>
                                             <!-- <td>{{$value->slider_speed}}</td> -->
-                                            <td>{{$value->redirect_url}}</td>
+                                            {{-- <td>{{$value->redirect_url}}</td> --}}
                                             <td class="gj_mge_bi_img_td">
                                                 @if($value->banner_image)
                                                     <a href="{{ asset($file_path.'/'.$value->banner_image)}}" target="_blank"><img src="{{ asset($file_path.'/'.$value->banner_image)}}" class="img-responsive gj_mge_bi_img"></a>

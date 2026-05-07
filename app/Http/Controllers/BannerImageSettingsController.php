@@ -96,7 +96,7 @@ class BannerImageSettingsController extends Controller
                     'image_title'    => 'required',
                     // 'slider_speed'   => 'required|integer',
                     'banner_image'   => 'required',
-                    'redirect_url'   => 'required',
+                    'redirect_url'   => 'nullable',
                     'is_block'       => 'nullable',
                 );
                 $validator = Validator::make($request->all(), $rules);
@@ -124,7 +124,7 @@ class BannerImageSettingsController extends Controller
                             $banner->banner_image = NULL;
                         }
 
-                        $banner->redirect_url   = $data['redirect_url'];
+                        // $banner->redirect_url   = $data['redirect_url'];
                         $banner->is_block       = 1;
                         
                         if($banner->save()) {
@@ -211,7 +211,7 @@ class BannerImageSettingsController extends Controller
                         'image_title'    => 'required',
                         // 'slider_speed'   => 'required|integer',
                         'banner_image'   => 'nullable',
-                        'redirect_url'   => 'required',
+                        'redirect_url'   => 'nullable',
                         'is_block'       => 'nullable',
                     );
                     $validator = Validator::make($request->all(), $rules);
@@ -239,7 +239,7 @@ class BannerImageSettingsController extends Controller
                             $banner->banner_image = NULL;
                         }
 
-                        $banner->redirect_url   = $data['redirect_url'];
+                        // $banner->redirect_url   = $data['redirect_url'];
                         $banner->is_block       = 1;
                         
                         if($banner->save()) {

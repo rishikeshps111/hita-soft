@@ -9,6 +9,157 @@
      border-radius: 50%;
  }
 
+ .header-action-item {
+     display: flex;
+     align-items: center;
+ }
+
+ .header-action-item .cart-icon {
+     position: relative;
+     width: 38px;
+     height: 38px;
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     border: 1px solid rgba(0, 0, 0, 0.12);
+     border-radius: 50%;
+     text-decoration: none;
+     color: var(--color-black);
+     transition: 0.3s;
+ }
+
+ .header-action-item .cart-icon:hover {
+     border-color: var(--primary);
+     color: var(--primary);
+ }
+
+ .header-action-item .cart-icon i {
+     font-size: 16px;
+ }
+
+ .header-action-item .cart-count {
+     top: -6px;
+     right: -7px;
+     min-width: 18px;
+     height: 18px;
+     padding: 0 5px;
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     font-size: 10px;
+     line-height: 18px;
+ }
+
+ .navbar-menu-list .top-auth-box {
+     margin-left: 5px;
+ }
+
+ .navbar-menu-list .top-auth-box a {
+     gap: 6px;
+     border-right: 0;
+ }
+
+ .navbar-menu-list .acount-drop-down {
+     position: relative;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     gap: 15px;
+     width: fit-content;
+     padding: 2px 5px;
+     border: 1px solid #ccc;
+     border-radius: 7px;
+     cursor: pointer;
+     background-color: #f2f2f2;
+     font-size: 14px;
+     font-weight: 500;
+ }
+
+ .navbar-menu-list .acount-drop-down span {
+     display: flex;
+     align-items: center;
+     justify-content: flex-start;
+     gap: 5px;
+ }
+
+ .navbar-menu-list .acount-drop-down img {
+     width: 35px;
+     height: 35px;
+     border-radius: 50%;
+     border: 3px dashed #fff;
+     object-fit: cover;
+ }
+
+ .navbar-menu-list .acount-drop-down p {
+     margin: 0;
+     max-width: 110px;
+     overflow: hidden;
+     white-space: nowrap;
+     text-overflow: ellipsis;
+     font-size: 14px;
+     font-weight: 600;
+     color: var(--color-black);
+ }
+
+ .navbar-menu-list .acount-drop-down > i {
+     font-size: 12px;
+     color: var(--color-black);
+ }
+
+ .navbar-menu-list .acount-drop-menu {
+     position: absolute;
+     top: calc(100% + 10px);
+     left: 0;
+     width: fit-content;
+     min-width: 160px;
+     display: none;
+     padding: 5px;
+     background: #fff;
+     border-radius: 10px;
+     box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
+     z-index: 5000;
+ }
+
+ .navbar-menu-list .drop-block .acount-drop-menu {
+     display: block;
+ }
+
+ .navbar-menu-list .acount-drop-menu ul {
+     padding: 0;
+     margin: 0;
+     list-style: none;
+     flex-direction: column;
+     justify-content: flex-start;
+     align-items: flex-start;
+ }
+
+ .navbar-menu-list .acount-drop-menu ul li {
+     margin: 5px 0;
+     width: 100%;
+ }
+
+ .navbar-menu-list .acount-drop-menu ul li a {
+     display: flex;
+     align-items: center;
+     gap: 8px;
+     padding: 7px 15px;
+     border-radius: 3px;
+     color: var(--color-black);
+     font-size: 14px;
+     text-decoration: none;
+     white-space: nowrap;
+     transition: 0.5s;
+ }
+
+ .navbar-menu-list .acount-drop-menu ul li a:hover {
+     background: var(--primary);
+     color: #fff;
+ }
+
+ .navbar-menu-list .acount-drop-menu ul li a:hover i {
+     color: #fff;
+ }
+
  .mega-menu {
      padding-left: 50px;
  }

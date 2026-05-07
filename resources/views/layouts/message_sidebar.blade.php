@@ -14,7 +14,7 @@
                </a>                   
             </li>
 
-            <li class="panel">
+            {{-- <li class="panel">
                 <a href="{{ route('manage_news_letters') }}">
                     <i class="fa fa-user"></i> Manage News Letters
                 </a>                   
@@ -24,7 +24,7 @@
                 <a href="{{ route('send_news_letters') }}">
                     <i class="fa fa-user"></i> Send News Letters
                 </a>                   
-            </li>
+            </li> --}}
         </ul>
     </div>
 </div>

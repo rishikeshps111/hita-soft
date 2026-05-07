@@ -222,6 +222,7 @@ Route::get('products', [FrontendController::class, 'products'])->name('products'
 Route::get('services', [FrontendController::class, 'services'])->name('services');
 Route::get('about-us', [FrontendController::class, 'aboutUs'])->name('about_us');
 Route::get('contact-us', [FrontendController::class, 'contactUs'])->name('contact_us');
+Route::post('contact-us', [FrontendController::class, 'storeContact'])->name('contact_us.store');
 
 
 
@@ -395,6 +396,10 @@ Route::group(['middleware' => 'check_login'], function () {
 	Route::get('/widget_setting', 'FooWidgetController@create')->name('create_widget_setting');
 	Route::post('/widget_setting', 'FooWidgetController@store')->name('store_widget_setting');
 	/*Widget Setting Route End*/
+
+	Route::get('/manage_home_services', 'HomeServicesController@index')->name('manage_home_services');
+	Route::post('/manage_home_services', 'HomeServicesController@store')->name('store_home_services');
+	Route::post('/delete_home_service', 'HomeServicesController@delete')->name('delete_home_service');
 
 	/*Header Setting Route Start*/
 	Route::get('/header_setting', 'HeaderMenusController@create')->name('header_setting');

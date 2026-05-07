@@ -47,6 +47,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Name</th>
+                                                    <th>User Type</th>
                                                     <th>Message</th>
                                                     <th>Image</th>
                                                     <!--<th>Rating</th>-->
@@ -61,6 +62,10 @@
                                                                 <!-- Hidden input to track existing testimonial IDs for updates -->
                                                                 <input type="hidden" name="testimonial_id[]" value="{{ $fpvalues->id ?? '' }}">
                                                                 <input class="form-control" placeholder="Enter Name" name="testimonial_name[]" type="text" value="{{ $fpvalues->name ?? '' }}">
+                                                            </td>
+
+                                                            <td>
+                                                                <input class="form-control" placeholder="Enter User Type" name="testimonial_user_type[]" type="text" value="{{ $fpvalues->user_type ?? '' }}">
                                                             </td>
                                             
                                                             <td>
@@ -171,6 +176,7 @@
             var newRow = `
                 <tr id="gj_tr_f_pay_${fpay}">
                     <td><input class="form-control" placeholder="Enter Name" name="testimonial_name[]" type="text"></td>
+                    <td><input class="form-control" placeholder="Enter User Type" name="testimonial_user_type[]" type="text"></td>
                     <td><textarea class="form-control" placeholder="Enter Message" name="testimonial_message[]" rows="2"></textarea></td>
                     <td>
                         <input type="file" name="testimonial_image[]" accept="image/*" class="gj_p_image gj_edit_p_image form-control">

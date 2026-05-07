@@ -13,6 +13,10 @@ $footer_links2 = \DB::table('footer_all_links')->Where('type', 2)->get();
 $footer_links3 = \DB::table('footer_all_links')->Where('type', 3)->get();
 $footer_social_links = \DB::table('footer_social_links')->get();
 $footer_payments = \DB::table('footer_payments')->get();
+$contact_page = \DB::table('contact_us_page')->latest()->first();
+$contact_defaults = \App\ContactUsPage::defaults();
+$header_email = ($contact_page && !empty($contact_page->email)) ? $contact_page->email : $contact_defaults['email'];
+$header_phone = ($contact_page && !empty($contact_page->phone)) ? $contact_page->phone : $contact_defaults['phone'];
 
 
 $top_menus = \DB::table('header_menus')->OrderBy('priority', 'ASC')->get();
@@ -64,6 +68,7 @@ use Illuminate\Support\Str;
     <!-- Fontawesome -->
     <link href="{{ asset('assets/fontawesome-free-7.0.0-web/css/fontawesome.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/fontawesome-free-7.0.0-web/css/brands.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/fontawesome-free-7.0.0-web/css/regular.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/fontawesome-free-7.0.0-web/css/solid.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/fontawesome-free-7.0.0-web/css/sharp-thin.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/fontawesome-free-7.0.0-web/css/sharp-duotone-thin.css') }}" rel="stylesheet" />

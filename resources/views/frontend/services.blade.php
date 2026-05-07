@@ -108,6 +108,21 @@ if ($right_offer) {
 <section class="section-padding">
     <div class="container">
         <div class="row">
+            @if(isset($services) && count($services) != 0)
+                @foreach($services as $service)
+                    <div class="col-lg-6 mb-3">
+                        <div class="how-it-works-container-cs">
+
+                            <img src="{{ asset($service->image ? $service->image : 'assets/img/no-img.jpg') }}" alt="">
+                            <div>
+                                <h3>{{ $service->title }}</h3>
+                                <p>{{ $service->description }}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                @endforeach
+            @else
             <div class="col-lg-6 mb-3">
                 <div class="how-it-works-container-cs">
 
@@ -168,6 +183,7 @@ if ($right_offer) {
 
                 </div>
             </div>
+            @endif
         </div>
     </div>
 </section>

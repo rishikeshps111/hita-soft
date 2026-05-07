@@ -75,6 +75,20 @@ if ($right_offer) {
     $st_date6 = date("Y-m-d", strtotime($right_offer->ad_start_date));
     $en_date6 = date("Y-m-d", strtotime($right_offer->ad_end_date));
 }
+
+$about_defaults = \App\AboutUsCMSSettings::defaults();
+$about_data = isset($about_page) && $about_page
+    ? array_merge($about_defaults, array_filter($about_page->toArray(), function ($value) {
+        return $value !== null && $value !== "";
+    }))
+    : $about_defaults;
+$about_asset = function ($path) {
+    if (!$path) {
+        return "";
+    }
+
+    return preg_match('/^https?:\/\//', $path) ? $path : asset($path);
+};
 ?>
 
 @extends('layouts.frontend')
@@ -102,28 +116,23 @@ if ($right_offer) {
 
 
 <div class="page-baner"
-    style="  background-image:linear-gradient(128deg,rgba(0, 0, 0, 0.485) 0%, rgba(0, 0, 0, 0.589) 100%), url(assets/img/baner/1.jpg);">
-    <h3>About Us</h3>
+    style="  background-image:linear-gradient(128deg,rgba(0, 0, 0, 0.485) 0%, rgba(0, 0, 0, 0.589) 100%), url({{ $about_asset($about_data['banner_image'] ?? '') }});">
+    <h3>{{ $about_data['banner_title'] ?? '' }}</h3>
 </div>
 <section class="section-padding">
     <div class="container">
         <div class="row">
             <div class="col-lg-5">
                 <div class="about-left">
-                    <img src="assets/img/ab3.jpg" alt="">
+                    <img src="{{ $about_asset($about_data['who_image'] ?? '') }}" alt="">
                 </div>
             </div>
             <div class="col-lg-7">
                 <div class="about-right">
-                    <h3>Who We Are</h3>
-                    <p>Hita Soft Systems is a specialized engineering firm based in Thiruvananthapuram, Kerala,
-                        focused on the design and manufacturing of embedded software-controlled automation systems,
-                        particularly for water pump management</p>
-                    <p>Founded and led by CS Rajan Babu, Design Engineer, the company combines strong technical
-                        expertise with practical innovation to deliver reliable, efficient, and cost-effective
-                        solutions for residential, commercial, and industrial applications.</p>
-                    <p>With a deep understanding of real-world challenges in water management and electrical
-                        systems, we develop products that ensure automation, safety, and long-term performance.</p>
+                    <h3>{{ $about_data['who_title'] ?? '' }}</h3>
+                    @foreach(($about_data['who_content'] ?? []) as $paragraph)
+                    <p>{{ $paragraph }}</p>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -135,40 +144,32 @@ if ($right_offer) {
 
             <div class="col-lg-7">
                 <div class="about-right abt-left-r">
-                    <h3>What We Do</h3>
-                    <p>We design and manufacture advanced control panel systems that automate and protect water
-                        pumping operations. Our solutions are built with intelligent features such as</p>
+                    <h3>{{ $about_data['what_title'] ?? '' }}</h3>
+                    <p>{{ $about_data['what_content'] ?? '' }}</p>
                     <ul>
-                        <li>Water level sensing automation</li>
-                        <li>Dry run protection</li>
-                        <li>Overload safety</li>
-                        <li>High/low voltage protection</li>
-                        <li>Phase failure and sequence protection</li>
-                        <li>Timer-based operation control</li>
+                        @foreach(($about_data['what_items'] ?? []) as $item)
+                        <li>{{ $item }}</li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
             <div class="col-lg-5">
                 <div class="about-left">
-                    <img src="assets/img/ab2.jpg" alt="">
+                    <img src="{{ $about_asset($about_data['what_image'] ?? '') }}" alt="">
                 </div>
             </div>
         </div>
         <div class="row mt-4">
             <div class="col-lg-6 mb-2">
                 <div class="mission-box">
-                    <h3>Our Mission</h3>
-                    <p>To deliver innovative, reliable, and energy-efficient automation solutions through advanced
-                        embedded technology, ensuring safety, convenience, and long-term value for our customers.
-                    </p>
+                    <h3>{{ $about_data['mission_title'] ?? '' }}</h3>
+                    <p>{{ $about_data['mission_content'] ?? '' }}</p>
                 </div>
             </div>
             <div class="col-lg-6 mb-2">
                 <div class="mission-box">
-                    <h3> Our Vision</h3>
-                    <p>To become a trusted leader in embedded automation systems by continuously innovating and
-                        providing high-quality engineering solutions that enhance everyday life and industrial
-                        efficiency.</p>
+                    <h3>{{ $about_data['vision_title'] ?? '' }}</h3>
+                    <p>{{ $about_data['vision_content'] ?? '' }}</p>
                 </div>
             </div>
         </div>
@@ -179,72 +180,49 @@ if ($right_offer) {
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="section-title">
-                    <h3>Our Core Values</h3>
+                    <h3>{{ $about_data['core_values_title'] ?? '' }}</h3>
 
                 </div>
             </div>
         </div>
         <div class="row mt-3 row-20">
+            @foreach(($about_data['core_values'] ?? []) as $core)
             <div class="col-lg-3 mb-3">
                 <div class="core-values">
-                    <h3>Innovation</h3>
-                    <p>Continuously improving and adopting new technologies</p>
+                    <h3>{{ $core['title'] ?? '' }}</h3>
+                    <p>{{ $core['description'] ?? '' }}</p>
                 </div>
             </div>
-            <div class="col-lg-3 mb-3">
-                <div class="core-values">
-                    <h3>Quality</h3>
-                    <p>Delivering durable and reliable products</p>
-                </div>
-            </div>
-            <div class="col-lg-3 mb-3">
-                <div class="core-values">
-                    <h3>Integrity</h3>
-                    <p>Transparent and ethical business practices</p>
-                </div>
-            </div>
-            <div class="col-lg-3 mb-3">
-                <div class="core-values">
-                    <h3>Customer Focus</h3>
-                    <p>Understanding and fulfilling customer needs</p>
-                </div>
-            </div>
-            <div class="col-lg-3 mb-3">
-                <div class="core-values">
-                    <h3>Excellence</h3>
-                    <p>Commitment to engineering precision and performance</p>
-                </div>
-            </div>
+            @endforeach
 
         </div>
     </div>
 </section>
-<section class="section-padding bg-img-sec" style="background-image: linear-gradient(128deg,rgba(0, 0, 0, 0.386) 0%, rgba(0, 0, 0, 0.408) 100%),url(assets/img/ab4.jpg);">
+<section class="section-padding bg-img-sec" style="background-image: linear-gradient(128deg,rgba(0, 0, 0, 0.386) 0%, rgba(0, 0, 0, 0.408) 100%),url({{ $about_asset($about_data['leadership_bg_image'] ?? '') }});">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6 mb-3">
                 <div class="leadership-box">
-                    <h6>Leadership</h6>
-                    <h3>CS Rajan Babu</h3>
+                    <h6>{{ $about_data['leadership_label'] ?? '' }}</h6>
+                    <h3>{{ $about_data['leadership_name'] ?? '' }}</h3>
                     <hr>
-                    <h5>Owner & Design Architect | Design Engineer</h5>
-                    <p>With extensive experience in embedded systems and automation, he leads the company with a
-                        strong focus on technical excellence and product innovation.</p>
+                    <h5>{{ $about_data['leadership_designation'] ?? '' }}</h5>
+                    <p>{{ $about_data['leadership_content'] ?? '' }}</p>
 
                 </div>
             </div>
             <div class="col-lg-6 mb-3">
                 <div class="leadership-box">
-                    <h6>Our Presence</h6>
-                    <h3>Hita Soft Systems</h3>
+                    <h6>{{ $about_data['presence_label'] ?? '' }}</h6>
+                    <h3>{{ $about_data['presence_name'] ?? '' }}</h3>
                     <hr>
-                    <p>TC 49/20-1
-                        Pamamcode, Pappanamcode <br>
-                        Industrial Estate PO <br>
-                        Thiruvananthapuram, Kerala - 695019
-                        India</p>
-                    <a href="#!">+91-9387737998</a>
-                    <a href="#!">hitasoftsystems@gmail.com</a>
+                    <p>{!! nl2br(e($about_data['presence_address'] ?? '')) !!}</p>
+                    @if(!empty($about_data['presence_phone']))
+                    <a href="tel:{{ $about_data['presence_phone'] }}">{{ $about_data['presence_phone'] }}</a>
+                    @endif
+                    @if(!empty($about_data['presence_email']))
+                    <a href="mailto:{{ $about_data['presence_email'] }}">{{ $about_data['presence_email'] }}</a>
+                    @endif
 
                 </div>
             </div>

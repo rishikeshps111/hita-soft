@@ -33,6 +33,8 @@
                         <ul class="collapse" id="wid_nav">
                             <!--<li class=""><a href="{{ route('create_widget_setting') }}"><i class="fa fa-angle-right"></i> Widget Settings</a></li>-->
 
+                            <li class=""><a href="{{ route('manage_home_services') }}"><i class="fa fa-angle-right"></i> Manage Services</a></li>
+
                             <!--<li class=""><a href="{{ route('header_setting') }}"><i class="fa fa-angle-right"></i> Top Menus </a></li>-->
 
                             <li class=""><a href="{{ route('footer_setting') }}"><i class="fa fa-angle-right"></i> Footer Settings </a></li>
@@ -285,6 +287,7 @@
                             <li class=""><a href="{{ route('add_cms_page') }}"><i class="fa fa-angle-right"></i> Add Page</a></li>
                             <li class=""><a href="{{ route('manage_cms_page') }}"><i class="fa fa-angle-right"></i> Manage CMS Pages</a></li>
                             <li class=""><a href="{{ route('add_about_page') }}"><i class="fa fa-angle-right"></i> About Us</a></li>                
+                            <li class=""><a href="{{ route('contact_page_setting') }}"><i class="fa fa-angle-right"></i> Contact Us</a></li>
                             {{--<li class=""><a href="{{ route('add_career') }}"><i class="fa fa-angle-right"></i> Career Page</a></li>                
                             <li class=""><a href="{{ route('faq_page_setting') }}"><i class="fa fa-angle-right"></i>  FAQ Page</a></li>                   
                             <li class=""><a href="{{ route('sofp_setting') }}"><i class="fa fa-angle-right"></i>  Sell On Folkgems Page</a></li>

@@ -103,69 +103,24 @@ if ($right_offer) {
 <section class="home-baner-section">
     <div class="home-baner-slider">
         <div class="owl-carousel baner-main-carousel owl-theme">
-
+            @foreach($banner_images as $banner)
             <div class="item">
                 <div class="baner-main-img"
-                    style="background-image: linear-gradient(128deg,rgba(0, 0, 0, 0.386) 0%, rgba(0, 0, 0, 0.408) 100%),url(assets/img/baner/1.jpg);">
+                    style="background-image: linear-gradient(128deg,rgba(0, 0, 0, 0.386) 0%, rgba(0, 0, 0, 0.408) 100%),url({{ asset($banner_path.'/'.$banner->banner_image) }});">
                     <div class="container">
                         <div class="row ">
                             <div class="col-lg-8">
                                 <div class="baner-caption-card">
-                                    <h1>Smart Automation for Smarter Living
-                                    </h1>
-                                    <p>Advanced embedded solutions designed to control, protect, and optimize your
-                                        water pumping systems efficiently.
+                                    <h1>{{ $banner->image_title }}</h1>
+                                    <p> {{ $banner->button_title }}</p>
                                     </p>
-
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-            <div class="item">
-                <div class="baner-main-img"
-                    style="background-image: linear-gradient(128deg,rgba(0, 0, 0, 0.386) 0%, rgba(0, 0, 0, 0.408) 100%),url(assets/img/baner/2.jpg);">
-                    <div class="container">
-                        <div class="row ">
-                            <div class="col-lg-8">
-                                <div class="baner-caption-card">
-                                    <h1>Reliable Pump Automation Systems</h1>
-                                    <p>Experience seamless water management with intelligent control panels built
-                                        for safety and performance.
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="item">
-                <div class="baner-main-img"
-                    style="background-image: linear-gradient(128deg,rgba(0, 0, 0, 0.386) 0%, rgba(0, 0, 0, 0.408) 100%),url(assets/img/baner/3.jpg);">
-                    <div class="container">
-                        <div class="row ">
-                            <div class="col-lg-8">
-                                <div class="baner-caption-card">
-                                    <h1>Engineered for Precision & Protection</h1>
-                                    <p> From dry run protection to voltage safety — we ensure your equipment runs
-                                        without risk.
-                                    </p>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-
-
-
+            @endforeach
         </div>
     </div>
 </section>
@@ -418,6 +373,21 @@ if ($right_offer) {
         <div class="row mt-4 justify-content-center">
             <div class="col-lg-12">
                 <div class="owl-carousel owl-theme service-carusel carousel-btn2">
+                    @if(isset($home_services) && count($home_services) != 0)
+                        @foreach($home_services as $service)
+                            <div class="item">
+                                <div class="how-it-works-container">
+                                    <img src="{{ asset($service->image ? $service->image : 'assets/img/no-img.jpg') }}" alt="">
+
+                                    <h3>{{ $service->title }}</h3>
+                                    <div class="how-it-works-overlay">
+                                        <h5>{{ $service->title }}</h5>
+                                        <p>{{ $service->description }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
                     <div class="item">
                         <div class="how-it-works-container">
                             <img src="assets/img/how-works/1.jpg" alt="">
@@ -484,6 +454,7 @@ if ($right_offer) {
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
 
@@ -613,67 +584,19 @@ if ($right_offer) {
         <div class="row">
             <div class="col-lg-12">
                 <div class="owl-carousel owl-theme testi-carusel carousel-btn2">
+                    @foreach ($testimonial as $record)
                     <div class="item">
-
                         <div class="testimonial-card">
                             <p class="testimonial-text">
-                                Excellent automation solutions with reliable performance.
-                                Our water system is now completely hassle-free.
+                                {{ $record->message }}
                             </p>
-                            <div class="testimonial-author"><img src="assets/img/no-user-image-square.jpg"
-                                    alt="">Ramesh Nair</div>
-                            <div class="testimonial-role">Residential Client</div>
+                            <div class="testimonial-author"> <img src="{{ asset($record->image ? $record->image : 'assets/img/no-img.jpg') }}" alt="">
+                                {{ $record->name }}
+                            </div>
+                            <div class="testimonial-role">{{ $record->user_type ?: 'Business Owner' }}</div>
                         </div>
-
                     </div>
-                    <div class="item">
-
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">The panel board quality and safety features are outstanding.
-                                Highly recommended for industrial use.
-                            </p>
-                            <div class="testimonial-author"><img src="assets/img/no-user-image-square.jpg"
-                                    alt="">Suresh Kumar</div>
-                            <div class="testimonial-role">Facility Manager</div>
-                        </div>
-
-                    </div>
-                    <div class="item">
-
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">Professional approach and great technical expertise. The
-                                system works perfectly with zero issues.
-                            </p>
-                            <div class="testimonial-author"><img src="assets/img/no-user-image-square.jpg" alt="">
-                                Anil Krishnan</div>
-                            <div class="testimonial-role">Contractor</div>
-                        </div>
-
-                    </div>
-                    <div class="item">
-
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">We saved time and reduced manual work significantly after
-                                installing their automation system.
-                            </p>
-                            <div class="testimonial-author"><img src="assets/img/no-user-image-square.jpg"
-                                    alt="">Deepa Menon</div>
-                            <div class="testimonial-role">Homeowner</div>
-                        </div>
-
-                    </div>
-                    <div class="item">
-
-                        <div class="testimonial-card">
-                            <p class="testimonial-text">Reliable products and excellent after-sales support. Truly a
-                                trustworthy engineering team
-                            </p>
-                            <div class="testimonial-author"><img src="assets/img/no-user-image-square.jpg" alt="">
-                                Joseph Mathew</div>
-                            <div class="testimonial-role">Business Owner</div>
-                        </div>
-
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>

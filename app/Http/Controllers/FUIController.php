@@ -76,6 +76,7 @@ use App\FAQS;
 use App\CommonModel;
 use App\TestimonialSetting;
 use App\CustomiseProduct;
+use App\HomeService;
 
 use Pdf;
 use Collective\Html\HtmlFacade;
@@ -171,8 +172,9 @@ class FUIController extends Controller
             Session::flash('message', 'Page Not Found');
         }
         $testimonial = TestimonialSetting::get();
+        $home_services = HomeService::where('is_block', 1)->orderBy('priority', 'ASC')->orderBy('id', 'ASC')->get();
 
-        return View::make("front_end.index")->with(array('banner_images' => $banner_images, 'main_cat' => $main_cat, 'sub_cat' => $sub_cat, 'brand' => $brand, 'first_cat' => $first_cat, 'second_cat' => $second_cat, 'third_cat' => $third_cat, 'first_products' => $first_products, 'second_products' => $second_products, 'third_products' => $third_products, 'top_products' => $top_products, 'featured_products' => $featured_products, 'best_seller' => $best_seller, 'latest_products' => $latest_products, 'new_arrival' => $new_arrival, 'widget' => $widget, 'artist' => $artist, 'offer_products' => $offer_products, 'about' => $about, 'aaws' => $aaws, 'testimonial' => $testimonial));
+        return View::make("front_end.index")->with(array('banner_images' => $banner_images, 'main_cat' => $main_cat, 'sub_cat' => $sub_cat, 'brand' => $brand, 'first_cat' => $first_cat, 'second_cat' => $second_cat, 'third_cat' => $third_cat, 'first_products' => $first_products, 'second_products' => $second_products, 'third_products' => $third_products, 'top_products' => $top_products, 'featured_products' => $featured_products, 'best_seller' => $best_seller, 'latest_products' => $latest_products, 'new_arrival' => $new_arrival, 'widget' => $widget, 'artist' => $artist, 'offer_products' => $offer_products, 'about' => $about, 'aaws' => $aaws, 'testimonial' => $testimonial, 'home_services' => $home_services));
     }
 
     public function MainSearch(Request $request)

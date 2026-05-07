@@ -340,6 +340,7 @@ class FooterSettingsController extends Controller
         if ($privil) {
             $rules = [
                 'testimonial_name' => 'required|array',
+                'testimonial_user_type' => 'nullable|array',
                 'testimonial_message' => 'required|array',
                 // 'testimonial_rating' => 'required|array',
                 'testimonial_image' => 'nullable|array',
@@ -373,6 +374,7 @@ class FooterSettingsController extends Controller
 
                     // Update fields
                     $testimonialEntry->name = $name;
+                    $testimonialEntry->user_type = $data['testimonial_user_type'][$key] ?? null;
                     $testimonialEntry->message = $data['testimonial_message'][$key] ?? null;
                     // $testimonialEntry->rating = $data['testimonial_rating'][$key] ?? null;
 

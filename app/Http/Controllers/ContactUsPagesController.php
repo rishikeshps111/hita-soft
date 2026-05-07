@@ -4,189 +4,128 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\ContactUsPage;
-
-use Collective\Html\HtmlFacade;
 use Illuminate\Support\Facades\Validator;
 use Response;
-use Input;
 use DB;
 use View;
 use Session;
 use Redirect;
-use URL;
 
 class ContactUsPagesController extends Controller
 {
     protected $response;
- 
+
     public function __construct(Response $response)
     {
         $this->response = $response;
     }
 
-    public function index () {
+    public function create()
+    {
         $loged = session()->get('user');
-        if($loged) {
-            $privil = DB::table('previlages as A')
-                ->leftjoin('modules as B', 'A.module', '=', 'B.id')
-                ->select('A.id as pid','A.*','B.id as mid','B.*')
-                ->where('B.module_name', '=', 'Contact Us Page')
-                ->where('A.role', '=', $loged->user_type)
-                ->where('A.list', '=', 1)
-                ->first();
-
-            if($privil) {
-                $page = "Settings";                          
-                $contact = ContactUsPage::all();
-
-                if (sizeof($contact) != 0) {
-                	return response()->json(array('status_code'=>'1','response_msg'=>'Contact Us Page Deatils','response_data'=>array('data'=>$contact,'page'=>$page)), 200);
-                } else {
-                    return response()->json(array('status_code'=>'0','response_msg'=>'No Contact Us Page Deatils'), 200);
-                }
-            } else {
-                Session::flash('message', 'You Are Not Access This Module!'); 
-                Session::flash('alert-class', 'alert-danger');
-                return redirect()->back();
-            }
-        } else {
-            Session::flash('message', 'Please Login Properly!'); 
+        if (!$loged) {
+            Session::flash('message', 'Please Login Properly!');
             Session::flash('alert-class', 'alert-danger');
             return redirect()->back();
         }
+
+        if (!$this->canManage($loged)) {
+            Session::flash('message', 'You Are Not Access This Module!');
+            Session::flash('alert-class', 'alert-danger');
+            return redirect()->back();
+        }
+
+        $page = 'Settings';
+        $contact = ContactUsPage::first();
+        $defaults = ContactUsPage::defaults();
+
+        return View::make('settings.contact_page_setting')->with(compact('contact', 'defaults', 'page'));
     }
 
-    public function create () {
+    public function store(Request $request)
+    {
         $loged = session()->get('user');
-        if($loged) {
-            $privil = DB::table('previlages as A')
-                ->leftjoin('modules as B', 'A.module', '=', 'B.id')
-                ->select('A.id as pid','A.*','B.id as mid','B.*')
-                ->where('B.module_name', '=', 'Contact Us Page')
-                ->where('A.role', '=', $loged->user_type)
-                ->where('A.edit', '=', 1)
-                ->orwhere('A.add', '=', 1)
-                ->first();
-
-            if($privil) {
-                $page = "Settings";                           
-            	$contact = ContactUsPage::first();
-            	if($contact) {
-                	return View::make("settings.contact_page_setting")->with(array('contact'=>$contact,'page'=>$page));
-            	} else {
-                	return View::make('settings.contact_page_setting');
-            	}
-            } else {
-                Session::flash('message', 'You Are Not Access This Module!'); 
-                Session::flash('alert-class', 'alert-danger');
-                return redirect()->back();
-            }
-        } else {
-            Session::flash('message', 'Please Login Properly!'); 
+        if (!$loged) {
+            Session::flash('message', 'Please Login Properly!');
             Session::flash('alert-class', 'alert-danger');
             return redirect()->back();
         }
+
+        if (!$this->canManage($loged)) {
+            Session::flash('message', 'You Are Not Access This Module!');
+            Session::flash('alert-class', 'alert-danger');
+            return redirect()->back();
+        }
+
+        $validator = Validator::make($request->all(), [
+            'banner_title' => 'required',
+            'form_intro' => 'required',
+            'address' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'map_iframe' => 'nullable',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('contact_page_setting')->withErrors($validator)->withInput();
+        }
+
+        $contact = ContactUsPage::first();
+        if (!$contact) {
+            $contact = new ContactUsPage();
+        }
+
+        $contact->banner_title = $request->banner_title;
+        $contact->banner_caption = $request->banner_title;
+        $contact->form_intro = $request->form_intro;
+        $contact->address = $request->address;
+        $contact->email = $request->email;
+        $contact->phone = $request->phone;
+        $contact->map_iframe = $request->map_iframe;
+        $contact->main_hd = $request->banner_title;
+        $contact->content_1 = $request->address;
+        $contact->content_2 = $request->email;
+        $contact->content_3 = $request->phone;
+        $contact->touch_hd = 'Contact Form';
+        $contact->banner_image = $this->storeUpload($request, 'banner_image', $request->old_banner_image);
+
+        if ($contact->save()) {
+            Session::flash('message', 'Contact Page Settings Updated Successfully!');
+            Session::flash('alert-class', 'alert-success');
+            return redirect()->route('contact_page_setting');
+        }
+
+        Session::flash('message', 'Update Failed!');
+        Session::flash('alert-class', 'alert-danger');
+        return Redirect::back();
     }
 
-    public function store(Request $request) {
-        $data = Input::all();
-        $loged = session()->get('user');
-        if($loged) {
-            $privil = DB::table('previlages as A')
-                ->leftjoin('modules as B', 'A.module', '=', 'B.id')
-                ->select('A.id as pid','A.*','B.id as mid','B.*')
-                ->where('B.module_name', '=', 'Contact Us Page')
-                ->where('A.role', '=', $loged->user_type)
-                ->where('A.edit', '=', 1)
-                ->orwhere('A.add', '=', 1)
-                ->first();
+    private function canManage($loged)
+    {
+        return DB::table('previlages as A')
+            ->leftJoin('modules as B', 'A.module', '=', 'B.id')
+            ->select('A.id as pid', 'A.*', 'B.id as mid', 'B.*')
+            ->where('B.module_name', '=', 'Contact Us Page')
+            ->where('A.role', '=', $loged->user_type)
+            ->where(function ($query) {
+                $query->where('A.edit', '=', 1)
+                    ->orWhere('A.add', '=', 1);
+            })
+            ->first();
+    }
 
-            if($privil) {
-            	$page = "Settings";
-            	$contact = ContactUsPage::first();
-            	if($contact) {
-        	        $rules = array(
-                        'banner_image'    => 'nullable',
-        	            'banner_caption'  => 'nullable',
-                        'main_hd'         => 'required',
-                        'content_1'       => 'required',
-                        'content_2'       => 'required',
-                        'content_3'       => 'required',
-                        'touch_hd'        => 'required',
-        	        );
-                } else {
-                	$rules = array(
-                        'banner_image'    => 'required',
-        	            'banner_caption'  => 'nullable',
-        	            'main_hd'         => 'required',
-                        'content_1'       => 'required',
-                        'content_2'       => 'required',
-                        'content_3'       => 'required',
-                        'touch_hd'        => 'required',
-        	        );
-                }
-                $validator = Validator::make(Input::all(), $rules);
-
-                if ($validator->fails()) {
-                    if($contact) {
-                        return View::make("settings.contact_page_setting")->withErrors($validator)->with(array('contact'=>$contact,'page'=>$page));
-                    } else {
-                	   return View::make('settings.contact_page_setting')->withErrors($validator);
-                    }
-                } else {
-                    $id = Input::get('id');
-                    $contact = '';
-                    if($id != '') {
-                    	$contact = ContactUsPage::Where('id', $id)->first();
-                    } else {
-                    	$contact = new ContactUsPage();
-                    }
-
-                    if($contact) {
-        	            $contact->banner_caption   = $data['banner_caption'];
-        	            $contact->main_hd          = $data['main_hd'];
-                        $contact->content_1        = $data['content_1'];
-                        $contact->content_2        = $data['content_2'];
-                        $contact->content_3        = $data['content_3'];
-                        $contact->touch_hd         = $data['touch_hd'];
-
-                        if(isset($data['banner_image'])) {
-                            $file_name = $data['banner_image']->getClientOriginalName();
-                            $date = date('M-Y');
-                            // $file_path = '../public/images/products/'.$date;
-                            $file_path = 'images/contact/'.$date;
-                            $data['banner_image']->move($file_path, $file_name);
-                            $contact->banner_image       = $file_path.'/'.$file_name;
-                        } else if (isset($data['old_banner_image'])) {
-                            $contact->banner_image       = $data['old_banner_image'];
-                        } else {
-                            $contact->banner_image       = NULL;
-                        }
-
-                        if($contact->save()) {
-                        	Session::flash('message', 'Update Successfully!'); 
-        					Session::flash('alert-class', 'alert-success');
-                            return redirect()->route('contact_page_setting');
-                        } else {
-                        	Session::flash('message', 'Update Failed!'); 
-        					Session::flash('alert-class', 'alert-danger');
-                            return Redirect::back();
-                        }
-                    } else {
-                        Session::flash('message', 'Update Failed!'); 
-                        Session::flash('alert-class', 'alert-danger');
-                        return Redirect::back();
-                    }
-                }
-            } else {
-                Session::flash('message', 'You Are Not Access This Module!'); 
-                Session::flash('alert-class', 'alert-danger');
-                return redirect()->back();
-            }
-        } else {
-            Session::flash('message', 'Please Login Properly!'); 
-            Session::flash('alert-class', 'alert-danger');
-            return redirect()->back();
+    private function storeUpload(Request $request, $key, $old = null)
+    {
+        if (!$request->hasFile($key)) {
+            return $old;
         }
+
+        $file = $request->file($key);
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $date = date('M-Y');
+        $filePath = 'images/contact/' . $date;
+        $file->move($filePath, $fileName);
+
+        return $filePath . '/' . $fileName;
     }
 }
