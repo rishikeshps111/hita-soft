@@ -132,7 +132,7 @@
                     <!--    </ul>-->
                     <!--</li>-->
                     
-                    <li class="panel">
+                    {{-- <li class="panel">
                         <a href="#/" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#pagesr-nav">
                             <i class="fa fa-anchor"></i> Attributes Management
            
@@ -155,7 +155,7 @@
                             <!--<li class=""><a href="{{ route('add_capacity') }}"><i class="fa fa-angle-right"></i> Add Capacity </a></li>-->
                             <!--<li class=""><a href="{{ route('manage_capacity') }}"><i class="fa fa-angle-right"></i> Manage Capacity </a></li>                 -->
                         </ul>
-                    </li>
+                    </li> --}}
                     
 
                    {{-- <li class="panel">
@@ -206,7 +206,7 @@
                         </ul>
                     </li>--}}
 
-                    <li class="panel">
+                    {{-- <li class="panel">
                         <a href="#/" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#error-nav">
                             <i class="fa fa-plus"></i> Category Management
                             <span class="pull-right">
@@ -218,7 +218,7 @@
                             <li class=""><a href="{{ route('manage_category') }}"><i class="fa fa-angle-right"></i> Manage Categories </a></li>
                            
                         </ul>
-                    </li>
+                    </li> --}}
 
                     <!--<li class="panel">-->
                     <!--    <a href="#/" data-parent="#menu" data-toggle="collapse" class="accordion-toggle" data-target="#career_det">-->

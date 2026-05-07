@@ -76,8 +76,7 @@ div.click-search i,div.search-items-top i,div.search-items-top input,div.search-
                                      <input type="hidden" name="att_name[]" id="attname_{{$value->att_name}}" class="gj_att_name" value="{{$value->att_name}}">
                                     <input type="hidden" name="att_value[]" id="attvalue_{{$value->att_value}}" class="gj_att_value" value="{{$value->att_value}}">
                                      <input type="hidden" name="name[]" id="name_{{$value->product_id}}" class="gj_c_name" value="{{$value->name}}">
-                                    
-                                    <p class="product-cat">Category : {{$value->Products->MainCat->main_cat_name}}</p> 
+                                  
                                    
                                             <p class="price">
                                                  @if($value->Products->discounted_price > 0)
@@ -129,7 +128,7 @@ div.click-search i,div.search-items-top i,div.search-items-top input,div.search-
                                 <div class="col-6">
                                  <div class="cart-column-right"> 
                                     <div class="cart-column-right-top">
-                                        <button class="cart-wishlist gj_wish_list" data-wish-id="{{$value->product_id}}"><i class="fa-solid fa-heart"></i> </button>
+                                        <!-- <button class="cart-wishlist gj_wish_list" data-wish-id="{{$value->product_id}}"><i class="fa-solid fa-heart"></i> </button> -->
                                         <button type="button" class="cart-delete dlt-btn-cart">
                                             <a href="javascript:void(0);" type="button" class="btnRemoveWishlist gj_cart_tabl_del" data-id="{{$value->product_id}}" data-cart-id="{{$value->id}}" data-cart-key="{{(isset($value->cart_key) ? $value->cart_key : '')}}" data-cart-del="{{(isset($value->cart_del) ? $value->cart_del : '')}}">
                                                 <i class="fa-solid fa-trash"></i>

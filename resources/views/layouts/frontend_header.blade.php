@@ -115,7 +115,7 @@
                         </li>
 
                         @if($login_user && $login_user->user_type == 4)
-                            <div class="acount-drop-down drop-block" id="profileDrop" onclick="profileDrop()">
+                            <div class="acount-drop-down" id="profileDrop" onclick="profileDrop()">
                                 <span>
                                     <img src="{{ $headerProfileImage }}" alt="{{ $headerUserName }}">
                                     <p>{{ $headerUserName }}</p>

@@ -133,6 +133,35 @@ if ($right_offer) {
                     <p>
                         Built with intelligent control, safety protection, and durable components, our products
                         ensure efficient, hassle-free, and long-lasting performance.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            @if(isset($featured_products) && count($featured_products) != 0)
+                @foreach($featured_products as $product)
+                    <div class="col-xl-4 col-lg-6 mb-3">
+                        @include('frontend.partials.product-card', ['product' => $product])
+                    </div>
+                @endforeach
+            @else
+                <div class="col-lg-12">
+                    <h6 class="fw-bold text-center">Products Not Found</h6>
+                </div>
+            @endif
+        </div>
+    </div>
+</section>
+
+@if(false)
+<section class="section-padding bg-light-gray">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="section-title">
+                    <h3>Featured Products</h3>
+                    <p>
+                        Built with intelligent control, safety protection, and durable components, our products
+                        ensure efficient, hassle-free, and long-lasting performance.</p>
 
                 </div>
             </div>
@@ -355,6 +384,7 @@ if ($right_offer) {
     </div>
 
 </section>
+@endif
 
 
 <section class="section-padding ">

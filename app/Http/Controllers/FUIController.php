@@ -1805,7 +1805,7 @@ class FUIController extends Controller
         $products = Products::with('Attributes')->Where('id', $id)->Where('is_block', 1)->first();
         // dd($products->Attributes); 
         if ($products) {
-            $related = Products::Where('sub_sub_cat_name', $products->sub_sub_cat_name)->Where('id', '!=', $id)->Where('is_block', 1)->get();
+            $related = Products::where('id', '!=', $id)->where('is_block', 1)->inRandomOrder()->take(3)->get();
             foreach ($related as $item) {
                 $item->att = ProductsAttributes::where('product_id', $item->id)
                     ->where('is_block', 1)
@@ -6388,7 +6388,8 @@ class FUIController extends Controller
             if ($id) {
                 $product = Products::where('id', $id)->first();
                 if ($product) {
-                    $price = $product->product_cost;
+                    $displayPrice = $product->original_price > 0 ? $product->original_price : $product->discounted_price;
+                    $price = $displayPrice;
                     $tax_amount = $product->tax_amount;
                     $onhand_qty = $product->onhand_qty;
                     if ($onhand_qty != 0 && $onhand_qty > 0) {
@@ -6460,21 +6461,8 @@ class FUIController extends Controller
                                         $qty = 1;
                                     }
 
-                                    if (!isset($price) && $price == 0) {
-                                        $price = $product->product_cost;
-                                    }
-
-                                    if ($price) {
-                                        $price = $price;
-                                    } else {
-                                        $price = $product->product_cost;
-                                    }
-
-                                    if ($product->discounted_price > 0) {
-                                        $t_price = round(($qty * $product->discounted_price), 2) + $tax_amount;
-                                    } else {
-                                        $t_price = round(($qty * $product->original_price), 2) + $tax_amount;
-                                    }
+                                    $price = $price > 0 ? $price : $displayPrice;
+                                    $t_price = round(($qty * $displayPrice), 2) + $tax_amount;
 
                                     // $product_cost = $price + $tax_amount;
 
@@ -6487,8 +6475,8 @@ class FUIController extends Controller
                                         'product_id' => $product->id,
                                         'qty'   => $qty,
                                         'original_price' => $product->original_price,
-                                        'product_cost' => $product->product_cost,
-                                        'discounted_price'  => $product->discounted_price,
+                                        'product_cost' => $displayPrice,
+                                        'discounted_price'  => $displayPrice,
                                         'price' => $price,
                                         'tax_amount' => $tax_amount,
                                         'total_price' => $t_price,
@@ -6519,8 +6507,8 @@ class FUIController extends Controller
                                                 $carts->user_id     = $users->id;
                                                 $carts->name        = $product->product_title;
                                                 $carts->original_price = $product->original_price;
-                                                $carts->product_cost  = $product->product_cost;
-                                                $carts->discounted_price  = $product->discounted_price;
+                                                $carts->product_cost  = $displayPrice;
+                                                $carts->discounted_price  = $displayPrice;
                                                 $carts->price       = $price;
                                                 $carts->tax_amount = $tax_amount;
                                                 $carts->total_price = $t_price;
@@ -6600,25 +6588,9 @@ class FUIController extends Controller
                                     $qty = 1;
                                 }
 
-                                if (!isset($price) && $price == 0) {
-                                    $price = $product->product_cost;
-                                }
-
-                                if ($price) {
-                                    $price = $price;
-                                } else {
-                                    $price = $product->product_cost;
-                                }
-
-
-
-                                if ($product->discounted_price > 0) {
-                                    $t_price = round(($qty * $product->discounted_price), 2) + $tax_amount;
-                                    $product_cost = $product->discounted_price;
-                                } else {
-                                    $t_price = round(($qty * $product->original_price), 2) + $tax_amount;
-                                    $product_cost = $product->original_price;
-                                }
+                                $price = $price > 0 ? $price : $displayPrice;
+                                $t_price = round(($qty * $displayPrice), 2) + $tax_amount;
+                                $product_cost = $displayPrice;
 
                                 $cart_key = time() . uniqid();
                                 $cart_del = time();
@@ -6627,7 +6599,7 @@ class FUIController extends Controller
                                     'product_id' => $product->id,
                                     'qty'   => $qty,
                                     'original_price' => $product->original_price,
-                                    'product_cost' => $product->product_cost,
+                                    'product_cost' => $product_cost,
                                     'discounted_price'  => $product_cost,
                                     'price' => $price,
                                     'tax_amount' => $tax_amount,
@@ -6659,7 +6631,7 @@ class FUIController extends Controller
                                             $carts->user_id     = $users->id;
                                             $carts->name        = $product->product_title;
                                             $carts->original_price = $product->original_price;
-                                            $carts->product_cost       = $product->product_cost;
+                                            $carts->product_cost       = $product_cost;
                                             $carts->price       = $price;
                                             $carts->tax_amount = $tax_amount;
                                             $carts->total_price = $t_price;

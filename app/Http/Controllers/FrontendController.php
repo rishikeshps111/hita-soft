@@ -6,6 +6,7 @@ use App\HomeService;
 use App\AboutUsCMSSettings;
 use App\ContactUsPage;
 use App\Contacts;
+use App\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Session;
@@ -14,7 +15,9 @@ class FrontendController extends Controller
 {
     public function products()
     {
-        return view('frontend.products');
+        $products = Products::where('is_block', 1)->orderBy('created_at', 'DESC')->get();
+
+        return view('frontend.products', compact('products'));
     }
 
     public function services()

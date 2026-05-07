@@ -167,7 +167,9 @@ div.click-search i,div.search-items-top i,div.search-items-top input,div.search-
                         <div class="row">
                         @if(isset($all_products) && count($all_products) != 0)
                             @foreach($all_products as $key => $value) 
-                            <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                            <div class="col-xl-4 col-lg-6 mb-3">
+                                @include('frontend.partials.product-card', ['product' => $value])
+                                @if(false)
                                 <div class="Featured-product">
                                     @if(isset($value->featured_product_img) && $value->featured_product_img)
                                         <a href="{{ route('view_products', ['id' => $value->id]) }}" class="view-a">
@@ -225,6 +227,7 @@ div.click-search i,div.search-items-top i,div.search-items-top input,div.search-
                                        
                                     </div>
                                 </div>
+                                @endif
                             </div>
                              @endforeach
                         @else

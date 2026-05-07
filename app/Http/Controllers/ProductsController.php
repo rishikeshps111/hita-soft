@@ -154,17 +154,17 @@ class ProductsController extends Controller
                     'model_no'             => 'nullable',
                     'varient'              => 'nullable',
                     'vendor_code'          => 'nullable',
-                    'main_cat_name'        => 'required',
+                    'main_cat_name'        => 'nullable',
                     // 'sub_cat_name'         => 'nullable',
                     // 'sub_sub_cat_name'     => 'required',
                     'manufacturer'         => 'nullable',
                     'tags'                 => 'nullable',
                     // 'rang_price'       => 'required|numeric',
-                    'original_price'       => 'nullable|numeric',
+                    'original_price'       => 'required|numeric',
                     // 'h_tax'                  => 'nullable|numeric',
                     // 'product_cost'         => 'nullable|numeric',
                     // 'tax_amount'           => 'nullable|numeric',
-                    'discounted_price'     => 'required|numeric',
+                    'discounted_price'     => 'nullable|numeric',
                     'service_charge'       => 'nullable|numeric',
                     'tax_type'             => 'nullable',
                     // 'shiping_charge'       => 'nullable|numeric',
@@ -173,12 +173,12 @@ class ProductsController extends Controller
                     'measurement_unit'     => 'nullable',
                     // 'features'             => 'required',
                     'shiping_policy'       => 'nullable',
-                    'attributes_flag'      => 'required',
+                    'attributes_flag'      => 'nullable',
                     // 'offers_flag'          => 'required',
                     'featuredproduct_flag' => 'nullable',
                     // 'toprated_flag'        => 'required',
                     // 'best_seller_flag'     => 'required',
-                    'new_arrival'          => 'required',
+                    'new_arrival'          => 'nullable',
                     'delivery'             => 'nullable|integer',
                     // 'store_name'           => 'nullable',
                     'created_user'         => 'nullable',
@@ -243,13 +243,14 @@ class ProductsController extends Controller
                     if($product) {
         	            $product->product_code           = $data['product_code'];	 
         	            $product->product_title          = $data['product_title'];	 
-        	            $product->product_desc           = $data['product_desc'];	 
+        	            $product->product_desc           = $data['product_desc'];
+                        $product->short_description      = $data['short_description'] ?? null;
         	           // $product->product_weight         = $data['product_weight'];	 
         	           // $product->product_length         = $data['product_length'];	 
         	           // $product->product_width          = $data['product_width'];	 
         	           // $product->product_height         = $data['product_height'];	 
         	            // $product->vendor_code            = $data['vendor_code'];	
-        	            $product->brand                  = $data['brand'] ?? '0';	 
+        	            $product->brand                  = $data['brand'] ?? null;	 
         	            $product->model_no               = $data['model_no'] ?? '0';	 
         	            $product->varient                = $data['varient'] ?? '0';	 
         	            
@@ -279,29 +280,34 @@ class ProductsController extends Controller
                            $product->tags                = NULL;
                         }   
                         $product->rang_price         = $data['rang_price'] ?? '0';	 
-        	            $product->original_price         = $data['original_price'];	 
+        	            $product->original_price         = $data['original_price'] ?? 0;	 
         	            $product->tax                    = $data['h_tax'] ?? '0'; 
         	            $product->product_cost           = $data['product_cost'] ?? '0';	 
                         $product->tax_amount             = $data['tax_amount'] ?? '0';    
-                        $product->discounted_price       = $data['discounted_price'] ?? '0';    
+                        $product->discounted_price       = $product->original_price;    
         	            $product->service_charge         = $data['service_charge'] ?? '0';	 
         	            $product->tax_type               = $data['tax_type'] ?? '0';	 
         	           // $product->shiping_charge         = $data['shiping_charge'] ?? '0';	
         	           // $product->inter_shiping_charge = $data['inter_shiping_charge'] ?? '0';	
         	            $product->onhand_qty             = $data['onhand_qty'];	 
-        	            $product->measurement_unit       = $data['measurement_unit'] ?? '0';	 
-        	            $product->features               = $data['features'] ?? null;	 
+        	            $product->measurement_unit       = $data['measurement_unit'] ?? null;	 
+        	            $product->features               = $data['features'] ?? null;
+                        $product->product_capacity       = $data['product_capacity'] ?? null;
+                        $product->product_type           = $data['product_type'] ?? null;
+                        $product->product_power          = $data['product_power'] ?? null;
+                        $product->product_size           = $data['product_size'] ?? null;
+                        $product->product_feature_text   = $data['product_feature_text'] ?? null;
         	            $product->delivery_text               = $data['delivery_text'] ?? '';	 
         	            $product->instructions               = $data['instructions'] ?? '';	 
         	            $product->disclaimer               = $data['disclaimer'] ?? '';	 
         	            $product->note               = $data['note'] ?? '';	 
         	            $product->shiping_policy         = $data['shiping_policy'] ?? '0';	 
-        	            $product->attributes_flag        = $data['attributes_flag'];	 
+        	            $product->attributes_flag        = $data['attributes_flag'] ?? 0;	 
         	           // $product->offers_flag            = $data['offers_flag'];	 
-        	            $product->featuredproduct_flag   = $data['featuredproduct_flag'];	 
+        	            $product->featuredproduct_flag   = $data['featuredproduct_flag'] ?? 0;	 
         	           // $product->toprated_flag          = $data['toprated_flag'];	 
         	           // $product->best_seller_flag       = $data['best_seller_flag'];	 
-                        $product->new_arrival            = $data['new_arrival'];    
+                        $product->new_arrival            = $data['new_arrival'] ?? 0;    
         	            $product->delivery               = $data['delivery'] ?? '0';
         	            $product->product_notes   =$data['product_notes'] ?? '';
         	           // if($data['store_name']) {
@@ -583,7 +589,7 @@ class ProductsController extends Controller
         	            'model_no'             => 'nullable',
         	            'varient'              => 'nullable',
         	            // 'vendor_code'          => 'nullable',
-        	            'main_cat_name'        => 'required',
+        	            'main_cat_name'        => 'nullable',
         	           // 'sub_cat_name'         => 'nullable',
         	           // 'sub_sub_cat_name'     => 'required',
         	            'manufacturer'         => 'nullable',
@@ -602,12 +608,12 @@ class ProductsController extends Controller
         	            'measurement_unit'     => 'nullable',
         	           // 'features'             => 'required',
         	            'shiping_policy'       => 'nullable',
-        	            'attributes_flag'      => 'required',
+        	            'attributes_flag'      => 'nullable',
         	           // 'offers_flag'          => 'required',
         	            'featuredproduct_flag' => 'nullable',
         	           // 'toprated_flag'        => 'required',
         	           // 'best_seller_flag'     => 'required',
-                        'new_arrival'          => 'required',
+                        'new_arrival'          => 'nullable',
         	            'delivery'             => 'nullable|integer',
         	           // 'store_name'           => 'nullable',
         	            'created_user'         => 'nullable',
@@ -661,11 +667,12 @@ class ProductsController extends Controller
 
         	            $product->product_title          = $data['product_title'];	 
         	            $product->product_desc           = $data['product_desc'];
+                        $product->short_description      = $data['short_description'] ?? null;
         	           // $product->product_weight         = $data['product_weight'];	 
         	           // $product->product_length         = $data['product_length'];	 
         	           // $product->product_width          = $data['product_width'];	 
         	           // $product->product_height         = $data['product_height'];	 
-        	            $product->brand                  = $data['brand'] ?? '0';	 
+        	            $product->brand                  = $data['brand'] ?? null;	 
         	            $product->model_no               = $data['model_no'] ?? '0';	 
         	            $product->varient                = $data['varient'] ?? '0';	
         	            
@@ -695,18 +702,23 @@ class ProductsController extends Controller
                            $product->tags                = NULL;
                         }
                         $product->rang_price         = $data['rang_price']?? '0';	 
-                        $product->original_price         = $data['original_price'] ?? '0';  
+                        $product->original_price         = $data['original_price'] ?? 0;  
                         $product->tax                    = $data['h_tax'] ?? '0'; 
                         $product->product_cost           = $data['product_cost'] ?? '0';    
                         $product->tax_amount             = $data['tax_amount'] ?? '0';    
-                        $product->discounted_price       = $data['discounted_price'] ?? '0';  
+                        $product->discounted_price       = $product->original_price;  
         	           // $product->service_charge         = $data['service_charge'] ?? '0';	 
         	            $product->tax_type               = $data['tax_type'] ?? '0';	 
         	           // $product->shiping_charge         = $data['shiping_charge'] ?? '0';
         	           // $product->inter_shiping_charge = $data['inter_shiping_charge'] ?? '0';
         	            $product->onhand_qty             = $data['onhand_qty'] ?? '0';	 
-        	            $product->measurement_unit       = $data['measurement_unit'] ?? '0';	 
+        	            $product->measurement_unit       = $data['measurement_unit'] ?? null;	 
         	            $product->features               = $data['features'] ?? '0';
+                        $product->product_capacity       = $data['product_capacity'] ?? null;
+                        $product->product_type           = $data['product_type'] ?? null;
+                        $product->product_power          = $data['product_power'] ?? null;
+                        $product->product_size           = $data['product_size'] ?? null;
+                        $product->product_feature_text   = $data['product_feature_text'] ?? null;
         	            $product->delivery_text               = $data['delivery_text'] ?? '';	 
         	            $product->instructions               = $data['instructions'] ?? '';	 
         	            $product->disclaimer               = $data['disclaimer'] ?? '';	 
@@ -1436,15 +1448,9 @@ class ProductsController extends Controller
                         1 => ['label' => '#', 'value' => function ($row) { return $row->id; }],
                         2 => ['label' => 'Product Code', 'value' => function ($row) { return $row->product_code; }],
                         3 => ['label' => 'Product Title', 'value' => function ($row) { return $row->product_title; }],
-                        4 => ['label' => 'Main Category', 'value' => function ($row) { return $row['main_cat_name'] ?? '---------'; }],
-                        5 => ['label' => 'Stock Quantity', 'value' => function ($row) { return $row->onhand_qty; }],
-                        6 => ['label' => 'Rang Price', 'value' => function ($row) { return "Rs. " . $row->rang_price; }],
-                        7 => ['label' => 'Selling Price', 'value' => function ($row) { return "Rs. " . $row->original_price; }],
-                        8 => ['label' => 'Discount Selling Price', 'value' => function ($row) { return "Rs. " . $row->discounted_price; }],
-                        9 => ['label' => 'Tax Amount', 'value' => function ($row) { return $row->tax_amount; }],
-                        10 => ['label' => 'Final Selling Price', 'value' => function ($row) { return $row->product_cost ?? '0'; }],
-                      
-                        11 => ['label' => 'Product Image', 'value' => function ($row) { return $row->image ?? 'N/A'; }],
+                        4 => ['label' => 'Stock Quantity', 'value' => function ($row) { return $row->onhand_qty; }],
+                        5 => ['label' => 'Price', 'value' => function ($row) { return "Rs. " . $row->original_price; }],
+                        6 => ['label' => 'Product Image', 'value' => function ($row) { return $row->featured_product_img ?? 'N/A'; }],
                        
                     ];
 
@@ -1620,9 +1626,6 @@ class ProductsController extends Controller
             'rang_price',
             'original_price',
             'h_tax',
-            'product_cost',
-            'tax_amount',
-            'discounted_price',
             'onhand_qty',
             'features',
             'featuredproduct_flag',
@@ -1641,9 +1644,6 @@ class ProductsController extends Controller
             'Rang Price',
             'Selling Price',
             'Tax Percentage',
-            'Final Selling Price',
-            'Tax Amount',
-            'Discount Selling Price',
             'On-Hand Quantity',
             'Features',
             'Featured Product (Yes/No)',
@@ -1715,7 +1715,7 @@ class ProductsController extends Controller
             $product->tax = $rowData['h_tax'] ?? '0';
             $product->product_cost = $rowData['product_cost'] ?? '0';
             $product->tax_amount = $rowData['tax_amount'] ?? '0';
-            $product->discounted_price = $rowData['discounted_price'] ?? '0';
+            $product->discounted_price = $product->original_price;
             $product->service_charge = $rowData['service_charge'] ?? '0';
             $product->tax_type = $rowData['tax_type'] ?? '0';
             $product->shiping_charge = $rowData['shiping_charge'] ?? '0';

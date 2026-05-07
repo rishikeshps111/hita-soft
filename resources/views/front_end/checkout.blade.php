@@ -77,7 +77,7 @@ div.click-search i,div.search-items-top i,div.search-items-top input,div.search-
                     <div class="section-title column-title pb-0" >
                         <h3>Checkout Information</h3>
                         <div class="col-lg-12">
-                             <a href="{{ route('cart') }}" class="view_all_btn"><i class="fas fa-arrow-left"></i>&ensp; Back to Cart</a>
+                             <a href="{{ route('cart') }}" class="view_all_btn btn btn-primary mb-3"><i class="fas fa-arrow-left"></i>&ensp; Back to Cart</a>
                         </div>
                        
                     </div>
@@ -322,7 +322,8 @@ div.click-search i,div.search-items-top i,div.search-items-top input,div.search-
                                             <div class="payment-method-info">
                                                 <label for="payment_{{ $method->id }}" class="d-flex align-items-center" >
                                                   <div class="payment-method-info-img">
-                                                      <img src="{{ asset($file_path.'/'.$method->icon_image)}}" alt=" {{ $method->name }}" >
+                                                      <img src="{{ asset($file_path.'/'.$method->icon_image)}}" alt=" {{ $method->name }}" style="
+    width: 67px; height: 67px; object-fit: contain;">
                                                   </div>
                                                 {{ $method->name }}
                                               </label>

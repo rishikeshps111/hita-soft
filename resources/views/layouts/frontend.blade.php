@@ -98,13 +98,9 @@ use Illuminate\Support\Str;
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             Swal.fire({
-                icon: '{{ Session::get('
-                alert - class ') == '
-                alert - success ' ? '
-                success ' : '
-                error ' }}',
+                icon: @json(Session::get('alert-class') == 'alert-success' ? 'success' : 'error'),
                 title: 'Message',
-                text: "{{ Session::get('message') }}",
+                text: @json(Session::get('message')),
                 confirmButtonText: 'OK'
             });
         });
@@ -124,21 +120,81 @@ use Illuminate\Support\Str;
     <script>
         window.addEventListener("scroll", function() {
             let navbar = document.querySelector(".nav-custom");
-            navbar.classList.toggle("navbar-scrolled", window.scrollY > 50);
+            if (navbar) {
+                navbar.classList.toggle("navbar-scrolled", window.scrollY > 50);
+            }
         });
     </script>
     <!-- Scripts End -->
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
         function showFlashMessage(message) {
             let flash = $('#product-flash-message');
 
-            flash.text(message)
-                .removeClass('d-none')
-                .fadeIn();
+            if (flash.length) {
+                flash.text(message)
+                    .removeClass('d-none alert-danger alert-success')
+                    .addClass('alert-danger')
+                    .fadeIn();
 
-            setTimeout(function() {
-                flash.fadeOut();
-            }, 3000);
+                setTimeout(function() {
+                    flash.fadeOut();
+                }, 3000);
+                return;
+            }
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'info',
+                    text: message,
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            alert(message);
+        }
+
+        function showCartMessage(message, type = 'info', callback = null) {
+            let flash = $('#product-flash-message');
+
+            if (flash.length) {
+                flash.text(message)
+                    .removeClass('d-none alert-danger alert-success alert-info')
+                    .addClass(type === 'success' ? 'alert-success' : 'alert-danger')
+                    .fadeIn();
+
+                setTimeout(function() {
+                    flash.fadeOut();
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
+                }, 1200);
+                return;
+            }
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: type === 'success' ? 'success' : 'error',
+                    text: message,
+                    confirmButtonText: 'OK'
+                }).then(function() {
+                    if (typeof callback === 'function') {
+                        callback();
+                    }
+                });
+                return;
+            }
+
+            alert(message);
+            if (typeof callback === 'function') {
+                callback();
+            }
         }
 
         function validateAttributes() {
@@ -165,10 +221,14 @@ use Illuminate\Support\Str;
 
     <!-- Add To Cart Script Start -->
     <script type="text/javascript">
-        $('.gj_add2cart').on('click', function(e) {
+        $(document).on('click', '.gj_add2cart', function(e) {
             e.preventDefault();
 
             if (!validateAttributes()) {
+                return false;
+            }
+            if ($(this).hasClass('disabled') || $(this).is('[disabled]')) {
+                showCartMessage('This product is currently out of stock.', 'error');
                 return false;
             }
             var id = $(this).attr('data-cart-id');
@@ -196,7 +256,7 @@ use Illuminate\Support\Str;
             if (id) {
                 $.ajax({
                     type: 'post',
-                    url: '{{url(' / add_to_cart ')}}',
+                    url: '{{ route('add_to_cart') }}',
                     data: {
                         id: id,
                         qty: qty,
@@ -209,33 +269,11 @@ use Illuminate\Support\Str;
                     },
                     success: function(data) {
                         if (data == 2) {
-                            $.confirm({
-                                title: '',
-                                content: 'Items Already in Cart, Go to Cart to Change Quantiy!',
-                                icon: 'fa fa-exclamation',
-                                theme: 'modern',
-                                closeIcon: true,
-                                animation: 'scale',
-                                type: 'purple',
-                                buttons: {
-                                    Ok: function() {}
-                                }
-                            });
+                            showCartMessage('Items already in cart. Go to cart to change quantity.', 'error');
                             // window.location.reload();
                         } else if (data == 7) {
-                            $.confirm({
-                                title: '',
-                                content: 'Sorry, we are out of stock for this product, we shall add more soon :)',
-                                icon: 'fa fa-exclamation',
-                                theme: 'modern',
-                                closeIcon: true,
-                                animation: 'scale',
-                                type: 'red',
-                                buttons: {
-                                    Ok: function() {
-                                        window.location.reload();
-                                    }
-                                }
+                            showCartMessage('Sorry, this product is out of stock.', 'error', function() {
+                                window.location.reload();
                             });
 
                             // setTimeout(function(){ window.location.reload(); }, 3000);
@@ -254,47 +292,21 @@ use Illuminate\Support\Str;
                             //         }
                             //     }
                             // });
-                            window.scrollTo({
-                                top: 0,
-                                behavior: 'smooth'
-                            });
-                            setTimeout(() => {
+                            showCartMessage('Added to cart successfully.', 'success', function() {
                                 window.location.reload();
-                            }, 300);
+                            });
                         } else {
-                            $.confirm({
-                                title: '',
-                                content: 'No Action Performed!',
-                                icon: 'fa fa-exclamation',
-                                theme: 'modern',
-                                closeIcon: true,
-                                animation: 'scale',
-                                type: 'purple',
-                                buttons: {
-                                    Ok: function() {
-                                        window.location.reload();
-                                    }
-                                }
-                            });
-                            setTimeout(function() {
+                            showCartMessage('No action performed.', 'error', function() {
                                 window.location.reload();
-                            }, 3000);
+                            });
                         }
+                    },
+                    error: function() {
+                        showCartMessage('Unable to add this product to cart. Please try again.', 'error');
                     }
                 });
             } else {
-                $.confirm({
-                    title: '',
-                    content: 'Please Add product to the cart in another time!',
-                    icon: 'fa fa-exclamation',
-                    theme: 'modern',
-                    closeIcon: true,
-                    animation: 'scale',
-                    type: 'purple',
-                    buttons: {
-                        Ok: function() {}
-                    }
-                });
+                showCartMessage('Please add this product to the cart another time.', 'error');
             }
         });
 
@@ -307,7 +319,7 @@ use Illuminate\Support\Str;
                 var cart_del = $(this).data('cart-del');
                 $.ajax({
                     type: 'post',
-                    url: '{{url(' / delete_cart ')}}',
+                    url: '{{ route('delete_cart') }}',
                     data: {
                         id: id,
                         cart_id: cart_id,

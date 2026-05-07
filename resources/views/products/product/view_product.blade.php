@@ -136,13 +136,8 @@
                                             <td>Rs. {{$product->rang_price}}</td>
                                         </tr>--}}
                                         <tr>
-                                            <th>Selling Price</th>
+                                            <th>Price</th>
                                             <td>Rs. {{$product->original_price}}</td>
-                                        </tr>
-                                        
-                                        <tr>
-                                            <th>Discounted Selling Price</th>
-                                            <td>Rs. {{$product->discounted_price}}</td>
                                         </tr>
                                         
                                        {{--  <tr>
